@@ -151,7 +151,10 @@ elif st.session_state.step == 1:
 
             # Copy dataset 
             df = st.session_state.df.copy()
-
+            
+            # Pre-processing function
+            df = input_prep(df)
+            
             # apply filters related to gno, tid, machine
             if gno_filter.strip():
                 gno_filter = int(gno_filter)
@@ -163,9 +166,6 @@ elif st.session_state.step == 1:
                 df = df[df["mmdb_name"] == machine_filter]
             if df.shape[0]==0:
                 st.warning("⚠️ Wrong filter utensil, tid, machine! Please reset filters.")
-
-            # Pre-processing function
-            df = input_prep(df)
 
             # Outliers detection using a function to compute delta increase in each step
             df = df.groupby(['mtdb_gno','mtdb_tid','mmdb_name'], group_keys=False).apply(process_delta)
