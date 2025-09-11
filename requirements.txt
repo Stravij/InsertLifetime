@@ -1,0 +1,8 @@
+streamlit
+pandas
+numpy
+matplotlib
+lifelines
+scipy
+io
+glob
