@@ -140,6 +140,8 @@ elif st.session_state.step == 1:
         threshold_pct = st.sidebar.number_input("Threshold to detect insert change if below", value=0.4, step=0.05)
         threshold_delta = st.sidebar.number_input("Threshold to detect df_final with instantaneuos increment", value=1.5, step=0.05)
         gno_filter = st.sidebar.text_input("Filter by specific insert group (leave blank for all)")
+        
+        st.success(type(gno_filter))
         gno_filter = int(gno_filter)
         tid_filter = st.sidebar.text_input("Filter by specific tid unique label (leave blank for all)")
         tid_filter = int(tid_filter)
