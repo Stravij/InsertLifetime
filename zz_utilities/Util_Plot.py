@@ -113,7 +113,8 @@ def plot_cumVSuse_triplet(triplet_df, ax = None):
         triplet_df['timestamp'].iloc[idx].dt.strftime('%Y-%m-%d'),
         rotation=90, ha='right'
     )
-    ax.set_title(f'Overview utensil {gno_lab} with id {tid_lab} on machine {mach_lab}')
+    # ax.set_title(f'Overview utensil {gno_lab} with id {tid_lab} on machine {mach_lab}')
+    ax.set_title(f'Detailed Overview')
     ax.set_xlabel("Timestamp")
     ax.set_ylabel("Use / Cumulated Use / Max use [s]")
     ax.legend()

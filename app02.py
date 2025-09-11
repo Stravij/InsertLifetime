@@ -76,9 +76,16 @@ if st.session_state.step == 0:
             status_placeholder = st.empty()
             status_placeholder.info("⏳ Loading in progress..")
             df  = pd.DataFrame()
-            path = os.getcwd() #get current path
-            sub_folder ='data'
-            csv_files = glob.glob(os.path.join(path,sub_folder, "*.csv"))
+
+            # # Local version
+            # path = os.getcwd() #get current path
+            # sub_folder ='data'
+            # csv_files = glob.glob(os.path.join(path,sub_folder, "*.csv"))
+            
+            # Streamlit
+            sub_folder = 'data'
+            files = glob.glob(os.path.join(sub_folder, "*.csv"))
+
             # loop over the list of csv files
             for csv_file in csv_files:
                 dfi = pd.read_csv(csv_file, sep=';')
