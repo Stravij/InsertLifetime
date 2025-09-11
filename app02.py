@@ -26,7 +26,7 @@ from zz_utilities.Util_Lifetime import * # import Lifetime Plotting functions
 # Streamlit App Layout
 # ---------------------------
 st.set_page_config(page_title="Reliability Analysis", layout="wide")
-st.title("🔧 Insert Lifetime Reliability Analysis")
+st.title("🔧 Tool Inserts -Lifetime and Reliability Analysis 🔧")
 
 # ---------------------------
 # Session-state init
@@ -98,7 +98,7 @@ if st.session_state.step == 0:
             st.success(f"✅ Sample dataset loaded with {st.session_state.df.shape[0]} rows"
                         f" and columns {st.session_state.df.shape[1]}")
             st.write("Data set preview:", df.head())
-            if st.button("➡️ Go to next step"):
+            if st.button("➡️ Clikc here ➡️ Go to next Step 2: First filters"):
                 st.rerun()
             
 
