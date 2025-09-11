@@ -6,18 +6,24 @@ import pandas as pd
 def input_prep(data):
     # Function to manipulate the input raw dataframe
     df = data.copy()
-    print('Total n. of records:', df.shape[0], ' | and columns:', df.shape[1])
+    # print('Total n. of records:', df.shape[0], ' | and columns:', df.shape[1])
     # remove not relevant columns
-    df.drop(columns=['Extra_ToolData.location_subid','mtdb_pno','Extra_ToolData.location_id',
-                    'mtdb_rot', 'mtdb_tedg','mtdb_ang', 'mtdb_twid', 'mtdb_mtang', 'mtdb_dpw',
-                    'mtdb_clif', 'mtdb_cuse','mtdb_mamox', 'mtdb_mamoz'],inplace=True)
+    # df.drop(columns=['Extra_ToolData.location_subid','mtdb_pno','Extra_ToolData.location_id',
+    #                 'mtdb_rot', 'mtdb_tedg','mtdb_ang', 'mtdb_twid', 'mtdb_mtang', 'mtdb_dpw',
+    #                 'mtdb_clif', 'mtdb_cuse','mtdb_mamox', 'mtdb_mamoz'],inplace=True)
+    # # modify columns with the correct unit
+    # df[['mtdb_len']]=df[['mtdb_len']]/1000000
+    # df[['mtdb_dia']]=df[['mtdb_dia']]/1000000
+    # # drop additional columns not relevant
+    # df.drop(columns=['mtdb_dia','mtdb_len','mtdb_hpw','mtdb_tpr','mtdb_lenb','mtdb_nomDia','mtdb_tno','id','mtdb_id'],inplace=True)
+
+    # keep pnly relevant columns
+    df = df[['mtdb_gno','mtdb_tid','Extra_ToolData.Mazak_MachineData.mmdb_name','mtdb_lif','mtdb_use','timestamp']]
     # rename columns
     df = df.rename(columns={'Extra_ToolData.Mazak_MachineData.mmdb_name': 'mmdb_name'})
     # fix time date in the correct format
     df['timestamp'] = pd.to_datetime(df['timestamp'], format='%d/%m/%Y %H:%M', errors='coerce')
-    # modify columns with the correct unit
-    df[['mtdb_len']]=df[['mtdb_len']]/1000000
-    df[['mtdb_dia']]=df[['mtdb_dia']]/1000000
+    
     # filtrare righe in cui è presente il limite vita utensile
     df = df[df['mtdb_lif']>0]
     # rimuovere utensili tornio e con 6 cifre
@@ -25,8 +31,7 @@ def input_prep(data):
     # rimuovere tid = 0 
     df = df[~df['mtdb_tid'].isin([0])]
     
-    # drop additional columns not relevant
-    df.drop(columns=['mtdb_dia','mtdb_len','mtdb_hpw','mtdb_tpr','mtdb_lenb','mtdb_nomDia','mtdb_tno','id','mtdb_id'],inplace=True)
+    
     # Sorting dataset
     df = df.sort_values(['mtdb_gno','mtdb_tid','mmdb_name','timestamp'])
     
