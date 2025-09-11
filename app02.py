@@ -84,7 +84,7 @@ if st.session_state.step == 0:
             
             # Streamlit
             sub_folder = 'data'
-            files = glob.glob(os.path.join(sub_folder, "*.csv"))
+            csv_files = glob.glob(os.path.join(sub_folder, "*.csv"))
 
             # loop over the list of csv files
             for csv_file in csv_files:
