@@ -83,10 +83,7 @@ if st.session_state.step == 0:
             # csv_files = glob.glob(os.path.join(path,sub_folder, "*.csv"))
             
             # Streamlit
-            # sub_folder = 'data'
-            # csv_files = glob.glob(os.path.join(sub_folder, "*.csv"))
             csv_files = glob.glob('data/*.CSV')
-            st.success(len(csv_files))
 
             # loop over the list of csv files
             for csv_file in csv_files:
@@ -143,7 +140,9 @@ elif st.session_state.step == 1:
         threshold_pct = st.sidebar.number_input("Threshold to detect insert change if below", value=0.4, step=0.05)
         threshold_delta = st.sidebar.number_input("Threshold to detect df_final with instantaneuos increment", value=1.5, step=0.05)
         gno_filter = st.sidebar.text_input("Filter by specific insert group (leave blank for all)")
+        gno_filter = int(gno_filter)
         tid_filter = st.sidebar.text_input("Filter by specific tid unique label (leave blank for all)")
+        tid_filter = int(tid_filter)
         machine_filter = st.sidebar.text_input("Filter by a specific machine (e.g MU305, leave blank for all)")
 
         if st.sidebar.button("Apply First Filters"):
@@ -160,7 +159,9 @@ elif st.session_state.step == 1:
             if tid_filter.strip():
                 df = df[df["mtdb_tid"] == tid_filter]
             if machine_filter.strip():
-                df = df[df["mtdb_tid"] == machine_filter]
+                df = df[df["mmdb_name"] == machine_filter]
+            if df.shape[0]==0:
+                st.warning("⚠️ Wrong filter utensil, tid, machine! Please reset filters.")
 
             # Pre-processing function
             df = input_prep(df)
