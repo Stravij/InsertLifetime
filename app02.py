@@ -140,11 +140,8 @@ elif st.session_state.step == 1:
         threshold_pct = st.sidebar.number_input("Threshold to detect insert change if below", value=0.4, step=0.05)
         threshold_delta = st.sidebar.number_input("Threshold to detect df_final with instantaneuos increment", value=1.5, step=0.05)
         gno_filter = st.sidebar.text_input("Filter by specific insert group (leave blank for all)")
-        
-        st.success(f"{type(gno_filter)} -> {gno_filter.strip()} and {gno_filter}")
-        gno_filter = int(gno_filter)
+        # st.success(f"{type(gno_filter)} -> {gno_filter.strip()} and {gno_filter}"
         tid_filter = st.sidebar.text_input("Filter by specific tid unique label (leave blank for all)")
-        tid_filter = int(tid_filter)
         machine_filter = st.sidebar.text_input("Filter by a specific machine (e.g MU305, leave blank for all)")
 
         if st.sidebar.button("Apply First Filters"):
@@ -157,8 +154,10 @@ elif st.session_state.step == 1:
 
             # apply filters related to gno, tid, machine
             if gno_filter.strip():
+                gno_filter = int(gno_filter)
                 df = df[df["mtdb_gno"] == gno_filter]
             if tid_filter.strip():
+                tid_filter = int(tid_filter)
                 df = df[df["mtdb_tid"] == tid_filter]
             if machine_filter.strip():
                 df = df[df["mmdb_name"] == machine_filter]
