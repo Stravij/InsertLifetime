@@ -98,7 +98,7 @@ if st.session_state.step == 0:
             st.success(f"✅ Sample dataset loaded with {st.session_state.df.shape[0]} rows"
                         f" and columns {st.session_state.df.shape[1]}")
             st.write("Data set preview:", df.head())
-            if st.button("➡️ Clikc here ➡️ Go to next Step 2: First filters"):
+            if st.button("➡️ Go to next Step 2: First filters"):
                 st.rerun()
             
 
@@ -121,7 +121,7 @@ if st.session_state.step == 0:
                 status_placeholder.empty()
                 st.success(f"✅ Loaded {len(uploaded_files)} file(s), {df.shape[0]} rows total and {df.shape[1]} columns ")
                 st.write("Data set preview:", df.head())
-                if st.button("➡️ Clikc here ➡️ Go to next Step 2: First filters"):
+                if st.button("➡️ Go to next Step 2: First filters"):
                     st.rerun()
             else:
                 st.warning("⚠️ Please upload at least one CSV file.")#prevent running analysis without data
@@ -189,7 +189,7 @@ elif st.session_state.step == 1:
             status_placeholder.empty()
             st.success("✅ First filters applied and completed calculation of cumulated use")
             st.write("Data set available as following preview:", df.head())
-            if st.button("➡️ Clikc here ➡️ Go to next Step 3: Second filters"):
+            if st.button("➡️ Go to next Step 3: Second filters"):
                 st.rerun()
 
 
@@ -230,7 +230,11 @@ elif st.session_state.step == 2:
             csv_buf = io.StringIO()
             df.to_csv(csv_buf, index=False)
             st.download_button("💾 Download aggregated dataset (CSV)", csv_buf.getvalue(), file_name="aggregated_dataset.csv")
-            if st.button("➡️ Clikc here ➡️ Go to next Step 4: Ranking and Charts"):
+            # Download final dataset
+            csv_buf2 = io.StringIO()
+            df_detailed.to_csv(csv_buf2, index=False)
+            st.download_button("💾 Download detailed dataset (CSV)", csv_buf2.getvalue(), file_name="detailed_dataset.csv")
+            if st.button("➡️ Go to next Step 4: Ranking and Charts"):
                 st.rerun()
     
 # =======================================================
