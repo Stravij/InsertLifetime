@@ -26,8 +26,8 @@ from zz_utilities.Util_Lifetime import * # import Lifetime Plotting functions
 # Streamlit App Layout
 # ---------------------------
 st.set_page_config(page_title="Reliability Analysis", layout="wide")
-st.title("🔧 Tool Inserts -Lifetime and Reliability Analysis 🔧")
-
+st.title("🔧 Tool Inserts Anlysis: Lifetime and Reliability")
+st.subheader("Main steps:\n 1) load the data\n 2) apply filters in two steps\n 3) visualize charts with lifetime and analysis using distributions as Weibull, Loglogistic, Exponential, Lognormal")
 # ---------------------------
 # Session-state init
 # ---------------------------
@@ -82,12 +82,12 @@ if st.session_state.step == 0:
             # sub_folder ='data'
             # csv_files = glob.glob(os.path.join(path,sub_folder, "*.csv"))
             
-            # Streamlit
-            csv_files = glob.glob('data/*.CSV')
+            # Streamlit version
+            csv_files = glob.glob('data/*.csv')
 
             # loop over the list of csv files
             for csv_file in csv_files:
-                dfi = pd.read_csv(csv_file, sep=';')
+                dfi = pd.read_csv(csv_file) #sep=';')
                 df = pd.concat([df, dfi],ignore_index=True) # concatenate
             df.drop_duplicates(inplace=True)
             st.session_state.df = df
@@ -112,7 +112,6 @@ if st.session_state.step == 0:
                 df  = pd.DataFrame()
                 dfs = [pd.read_csv(file,sep=";") for file in uploaded_files]
                 # If multiple files → concatenate
-                # df = pd.concat([df, dfs], ignore_index=True)
                 df = pd.concat(dfs, ignore_index=True)
                 st.session_state.df = df
                 st.session_state.filtered_df1 = None
@@ -140,11 +139,10 @@ elif st.session_state.step == 1:
         threshold_pct = st.sidebar.number_input("Threshold to detect insert change if below", value=0.4, step=0.05)
         threshold_delta = st.sidebar.number_input("Threshold to detect df_final with instantaneuos increment", value=1.5, step=0.05)
         gno_filter = st.sidebar.text_input("Filter by specific insert group (leave blank for all)")
-        # st.success(f"{type(gno_filter)} -> {gno_filter.strip()} and {gno_filter}"
         tid_filter = st.sidebar.text_input("Filter by specific tid unique label (leave blank for all)")
         machine_filter = st.sidebar.text_input("Filter by a specific machine (e.g MU305, leave blank for all)")
 
-        if st.sidebar.button("Apply First Filters"):
+        if st.sidebar.button("➡️ Apply First Filters"):
             # Progress
             status_placeholder = st.empty()
             status_placeholder.info("⏳ Processing first filters...")
@@ -208,7 +206,7 @@ elif st.session_state.step == 2:
         min_reset = st.sidebar.number_input("Minimum number of reset", value=1, step=1, min_value=1, max_value= 100)
         threshold_rec = st.sidebar.number_input("Minimum number of records for each triplet (utensil, tid, machine)", value=1000, step=200, min_value=1, max_value= 10000)
 
-        if st.sidebar.button("Apply Second Filters"):
+        if st.sidebar.button("➡️ Apply Second Filters"):
             # Progress
             status_placeholder = st.empty()
             status_placeholder.info("⏳ Processing second filters...")
