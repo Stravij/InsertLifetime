@@ -27,7 +27,8 @@ from zz_utilities.Util_Lifetime import * # import Lifetime Plotting functions
 # ---------------------------
 st.set_page_config(page_title="Reliability Analysis", layout="wide")
 st.title("🔧 Tool Inserts Anlysis: Lifetime and Reliability")
-st.subheader("Main steps:\n 1) load the data\n 2) apply filters in two steps\n 3) visualize charts with lifetime and analysis using distributions as Weibull, Loglogistic, Exponential, Lognormal")
+status_info = st.empty()
+status_info = st.subheader("Main steps:\n 1) load the data\n 2) apply filters in two steps\n 3) visualize charts with lifetime and analysis using distributions as Weibull, Loglogistic, Exponential, Lognormal")
 # ---------------------------
 # Session-state init
 # ---------------------------
@@ -53,6 +54,7 @@ with c1:
         st.session_state.filtered_df1 = None
         st.session_state.filtered_df2 = None
         st.session_state.step = 1 if st.session_state.df is not None else 0
+        st.session_state.load_type = None
         # no explicit rerun needed; button causes rerun automatically
 
 with c2:
@@ -60,6 +62,7 @@ with c2:
         st.session_state.df = None
         st.session_state.filtered_df1 = None
         st.session_state.filtered_df2 = None
+        st.session_state.load_type = None
         st.session_state.step = 0
 
 # =======================================================
@@ -72,6 +75,8 @@ if st.session_state.step == 0:
 
     if data_choice == "Sample Data":
         if st.sidebar.button("📥 Load Sample Data"):
+            # remove instructions
+            status_info = st.empty()
             # Progress
             status_placeholder = st.empty()
             status_placeholder.info("⏳ Loading in progress..")
@@ -98,8 +103,10 @@ if st.session_state.step == 0:
             st.success(f"✅ Sample dataset loaded with {st.session_state.df.shape[0]} rows"
                         f" and columns {st.session_state.df.shape[1]}")
             st.write("Data set preview:", df.head())
+            st.session_state.load_type = "Sample"
             if st.button("➡️ Go to next Step 2: First filters"):
                 st.rerun()
+            
             
 
     elif data_choice == "Custom Data":
@@ -120,6 +127,7 @@ if st.session_state.step == 0:
                 status_placeholder.empty()
                 st.success(f"✅ Loaded {len(uploaded_files)} file(s), {df.shape[0]} rows total and {df.shape[1]} columns ")
                 st.write("Data set preview:", df.head())
+                st.session_state.load_type = "Custom"
                 if st.button("➡️ Go to next Step 2: First filters"):
                     st.rerun()
             else:
@@ -151,7 +159,7 @@ elif st.session_state.step == 1:
             df = st.session_state.df.copy()
             
             # Pre-processing function
-            df = input_prep(df)
+            df = input_prep(df,st.session_state.load_type)
             
             # apply filters related to gno, tid, machine
             if gno_filter.strip():

@@ -3,7 +3,7 @@
 ##############################
 import pandas as pd
 
-def input_prep(data):
+def input_prep(data, label="Sample"):
     # Function to manipulate the input raw dataframe
     df = data.copy()
     # print('Total n. of records:', df.shape[0], ' | and columns:', df.shape[1])
@@ -16,13 +16,17 @@ def input_prep(data):
     # df[['mtdb_dia']]=df[['mtdb_dia']]/1000000
     # # drop additional columns not relevant
     # df.drop(columns=['mtdb_dia','mtdb_len','mtdb_hpw','mtdb_tpr','mtdb_lenb','mtdb_nomDia','mtdb_tno','id','mtdb_id'],inplace=True)
-
-    # keep pnly relevant columns
-    df = df[['mtdb_gno','mtdb_tid','Extra_ToolData.Mazak_MachineData.mmdb_name','mtdb_lif','mtdb_use','timestamp']]
-    # rename columns
-    df = df.rename(columns={'Extra_ToolData.Mazak_MachineData.mmdb_name': 'mmdb_name'})
-    # fix time date in the correct format
-    df['timestamp'] = pd.to_datetime(df['timestamp'], format='%d/%m/%Y %H:%M', errors='coerce')
+    if label != "Sample":
+        # keep pnly relevant columns
+        df = df[['mtdb_gno','mtdb_tid','Extra_ToolData.Mazak_MachineData.mmdb_name','mtdb_lif','mtdb_use','timestamp']]
+        # rename columns
+        df = df.rename(columns={'Extra_ToolData.Mazak_MachineData.mmdb_name': 'mmdb_name'})
+        # fix time date in the correct format
+        df['timestamp'] = pd.to_datetime(df['timestamp'], format='%d/%m/%Y %H:%M', errors='coerce')
+    else:
+        # fix time date in the correct format
+        # df['timestamp'] = pd.to_datetime(df['timestamp'], format='%Y/%m/%d %H:%M:%S', errors='coerce')
+        df['timestamp'] = pd.to_datetime(df['timestamp'], errors='coerce')
     
     # filtrare righe in cui è presente il limite vita utensile
     df = df[df['mtdb_lif']>0]
