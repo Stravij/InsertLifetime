@@ -28,7 +28,8 @@ from zz_utilities.Util_Lifetime import * # import Lifetime Plotting functions
 st.set_page_config(page_title="Reliability Analysis", layout="wide")
 st.title("🔧 Tool Inserts Analysis: Lifetime and Reliability")
 status_info = st.empty()
-status_info = st.text("Main steps:\n 1) load the data\n 2) apply filters in two steps\n 3) visualize charts with lifetime and analysis using distributions as Weibull, Loglogistic, Exponential, Lognormal")
+status_info = st.text(f"Main steps:\n 1) load the data\n 2) apply filters in two steps deciding various thresholds\n"
+                      f"3) visualize charts of lifetime trend and reliability analysis using distributions as Weibull, Loglogistic, Exponential, Lognormal")
 # ---------------------------
 # Session-state init
 # ---------------------------
@@ -232,13 +233,16 @@ elif st.session_state.step == 2:
                     f"--> detailed data set: {df_detailed.shape[0]} rows and {df_detailed.shape[1]} columns")
             st.write("Aggregated data set available (preview):", df.head())
             # Download final dataset
-            csv_buf = io.StringIO()
-            df.to_csv(csv_buf, index=False)
-            st.download_button("💾 Download aggregated dataset (CSV)", csv_buf.getvalue(), file_name="aggregated_dataset.csv")
-            # Download final dataset
-            csv_buf2 = io.StringIO()
-            df_detailed.to_csv(csv_buf2, index=False)
-            st.download_button("💾 Download detailed dataset (CSV)", csv_buf2.getvalue(), file_name="detailed_dataset.csv")
+            c3, c4 = st.columns([1, 1])
+            with c3:
+                csv_buf = io.StringIO()
+                df.to_csv(csv_buf, index=False)
+                st.download_button("💾 Download aggregated dataset (CSV)", csv_buf.getvalue(), file_name="aggregated_dataset.csv")
+            with c4:
+                # Download final dataset
+                csv_buf2 = io.StringIO()
+                df_detailed.to_csv(csv_buf2, index=False)
+                st.download_button("💾 Download detailed dataset (CSV)", csv_buf2.getvalue(), file_name="detailed_dataset.csv")
             if st.button("➡️ Go to next Step 4: Ranking and Charts"):
                 st.rerun()
     
