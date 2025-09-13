@@ -256,8 +256,15 @@ elif st.session_state.step == 3:
         st.write(f"Top {n_triplets} triplets - dataset preview", df_final.head())
         # Download final dataset
         csv_buf = io.StringIO()
-        df_ratio.to_csv(csv_buf, index=False)
+        df_final.to_csv(csv_buf, index=False)
         st.download_button("💾 Download final summary dataset (CSV)", csv_buf.getvalue(), file_name="summary_dataset.csv")
+        # Download detailed dataset top X
+        main_triplets = set(df_final[['mtdb_gno_','mtdb_tid_','mmdb_name_']].itertuples(index=False, name=None))
+        # Keep only rows that match most important triplets
+        df_detailed = df_detailed[df_detailed[['mtdb_gno','mtdb_tid','mmdb_name']].apply(tuple, axis=1).isin(main_triplets)]
+        csv_buf2 = io.StringIO()
+        df_detailed.to_csv(csv_buf2, index=False)
+        st.download_button("💾 Download detailed dataset (CSV)", csv_buf2.getvalue(), file_name="detailed_dataset.csv")
         # ----------------------------------------------------
         P_TARGET = st.number_input("Define percentile for recommed lifetime (e.g., 80% => B80 life)", value=0.8, step=0.1, min_value=0.1, max_value=0.9)
         # P_TARGET   = 0.80           # target survival for recommended lif (e.g., 90% => B10 life)
