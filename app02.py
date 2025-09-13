@@ -29,7 +29,7 @@ st.set_page_config(page_title="Reliability Analysis", layout="wide")
 st.title("🔧 Tool Inserts Analysis: Lifetime and Reliability")
 status_info = st.empty()
 status_info = st.text(f"Main steps:\n 1) load the data\n 2) apply filters in two steps deciding various thresholds\n"
-                      f"3) visualize charts of lifetime trend and reliability analysis using distributions as Weibull, Loglogistic, Exponential, Lognormal")
+                      f" 3) visualize charts of lifetime trend and reliability analysis using distributions as Weibull, Loglogistic, Exponential, Lognormal")
 # ---------------------------
 # Session-state init
 # ---------------------------
@@ -232,9 +232,10 @@ elif st.session_state.step == 2:
                     f"--> data set with ratio cum-use vs use: {df_ratio.shape[0]} rows and {df_ratio.shape[1]} columns \n"
                     f"--> detailed data set: {df_detailed.shape[0]} rows and {df_detailed.shape[1]} columns")
             st.write("Aggregated data set available (preview):", df.head())
-            # Download final dataset
+            
             c3, c4 = st.columns([1, 1])
             with c3:
+                # Download final dataset
                 csv_buf = io.StringIO()
                 df.to_csv(csv_buf, index=False)
                 st.download_button("💾 Download aggregated dataset (CSV)", csv_buf.getvalue(), file_name="aggregated_dataset.csv")
@@ -263,17 +264,22 @@ elif st.session_state.step == 3:
         n_triplets = st.number_input("Define number of triplets to be analyzed", value=20, step=5, min_value=10, max_value=50)
         df_final = df_ratio.head(n_triplets)
         st.write(f"Top {n_triplets} triplets - dataset preview", df_final.head())
-        # Download final dataset
-        csv_buf = io.StringIO()
-        df_final.to_csv(csv_buf, index=False)
-        st.download_button("💾 Download final summary dataset (CSV)", csv_buf.getvalue(), file_name="summary_dataset.csv")
+        
+        c5, c6 = st.columns([1, 1])
+        with c5:
+            # Download final dataset
+            csv_buf = io.StringIO()
+            df_final.to_csv(csv_buf, index=False)
+            st.download_button("💾 Download final summary dataset (CSV)", csv_buf.getvalue(), file_name="summary_dataset.csv")
+        
         # Download detailed dataset top X
         main_triplets = set(df_final[['mtdb_gno_','mtdb_tid_','mmdb_name_']].itertuples(index=False, name=None))
         # Keep only rows that match most important triplets
         df_detailed = df_detailed[df_detailed[['mtdb_gno','mtdb_tid','mmdb_name']].apply(tuple, axis=1).isin(main_triplets)]
-        csv_buf2 = io.StringIO()
-        df_detailed.to_csv(csv_buf2, index=False)
-        st.download_button("💾 Download detailed dataset (CSV)", csv_buf2.getvalue(), file_name="detailed_dataset.csv")
+        with c6:
+            csv_buf2 = io.StringIO()
+            df_detailed.to_csv(csv_buf2, index=False)
+            st.download_button("💾 Download detailed dataset (CSV)", csv_buf2.getvalue(), file_name="detailed_dataset.csv")
         # ----------------------------------------------------
         P_TARGET = st.number_input("Define percentile for recommed lifetime (e.g., 80% => B80 life)", value=0.8, step=0.1, min_value=0.1, max_value=0.9)
         # P_TARGET   = 0.80           # target survival for recommended lif (e.g., 90% => B10 life)
