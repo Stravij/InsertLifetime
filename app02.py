@@ -26,9 +26,9 @@ from zz_utilities.Util_Lifetime import * # import Lifetime Plotting functions
 # Streamlit App Layout
 # ---------------------------
 st.set_page_config(page_title="Reliability Analysis", layout="wide")
-st.title("🔧 Tool Inserts Anlysis: Lifetime and Reliability")
+st.title("🔧 Tool Inserts Analysis: Lifetime and Reliability")
 status_info = st.empty()
-status_info = st.subheader("Main steps:\n 1) load the data\n 2) apply filters in two steps\n 3) visualize charts with lifetime and analysis using distributions as Weibull, Loglogistic, Exponential, Lognormal")
+status_info = st.text("Main steps:\n 1) load the data\n 2) apply filters in two steps\n 3) visualize charts with lifetime and analysis using distributions as Weibull, Loglogistic, Exponential, Lognormal")
 # ---------------------------
 # Session-state init
 # ---------------------------
@@ -75,8 +75,6 @@ if st.session_state.step == 0:
 
     if data_choice == "Sample Data":
         if st.sidebar.button("📥 Load Sample Data"):
-            # remove instructions
-            status_info = st.empty()
             # Progress
             status_placeholder = st.empty()
             status_placeholder.info("⏳ Loading in progress..")
@@ -157,9 +155,10 @@ elif st.session_state.step == 1:
 
             # Copy dataset 
             df = st.session_state.df.copy()
+            label_type = st.session_state.load_type
             
             # Pre-processing function
-            df = input_prep(df,st.session_state.load_type)
+            df = input_prep(df,label_type)
             
             # apply filters related to gno, tid, machine
             if gno_filter.strip():
